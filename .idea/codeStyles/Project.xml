@@ -1,0 +1,32 @@
+<component name="ProjectCodeStyleConfiguration">
+  <code_scheme name="Project" version="173">
+    <option name="AUTODETECT_INDENTS" value="false" />
+    <JavaCodeStyleSettings>
+      <option name="USE_SINGLE_CLASS_IMPORTS" value="false" />
+      <option name="CLASS_COUNT_TO_USE_IMPORT_ON_DEMAND" value="1" />
+      <option name="NAMES_COUNT_TO_USE_IMPORT_ON_DEMAND" value="1" />
+      <option name="IMPORT_LAYOUT_TABLE">
+        <value>
+          <package name="" withSubpackages="true" static="true" />
+          <emptyLine />
+          <package name="java" withSubpackages="true" static="false" />
+          <emptyLine />
+          <package name="javax" withSubpackages="true" static="false" />
+          <emptyLine />
+          <package name="" withSubpackages="true" static="false" />
+          <emptyLine />
+          <package name="com.fundcount" withSubpackages="true" static="false" />
+          <emptyLine />
+        </value>
+      </option>
+    </JavaCodeStyleSettings>
+    <ScalaCodeStyleSettings>
+      <option name="MULTILINE_STRING_CLOSING_QUOTES_ON_NEW_LINE" value="true" />
+    </ScalaCodeStyleSettings>
+    <codeStyleSettings language="JAVA">
+      <option name="CATCH_ON_NEW_LINE" value="true" />
+      <option name="FINALLY_ON_NEW_LINE" value="true" />
+      <option name="IF_BRACE_FORCE" value="3" />
+    </codeStyleSettings>
+  </code_scheme>
+</component>
