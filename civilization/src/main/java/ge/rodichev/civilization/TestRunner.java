@@ -1,9 +1,5 @@
 package ge.rodichev.civilization;
 
-import java.io.*;
-import java.util.*;
-import java.util.stream.*;
-
 import ge.rodichev.civilization.entity.*;
 import ge.rodichev.civilization.entity.consts.*;
 
@@ -14,15 +10,15 @@ public class TestRunner {
 
     private static void testManager() {
         MultiplyManager manager = new MultiplyManager(prepareCitizens(true));
-        for (int i = 0; i < 1000; i++) {
-            manager.tick();
+        for (int i = 0; i < 500; i++) {
             manager.getCitizens().forEach(Citizen::tick);
+            manager.tick();
+            System.out.println(manager.getCitizens().size());
         }
-        manager.tick(); // 216939
     }
 
-    private static List<Citizen> prepareCitizens(boolean seven) {
-        List<Citizen> citizens = new ArrayList<>();
+    private static Citizens prepareCitizens(boolean seven) {
+        Citizens citizens = new Citizens();
         citizens.add(new Citizen(1, Age.MATURE, Health.NORM));
         citizens.add(new Citizen(2, Age.MATURE, Health.NORM));
         citizens.add(new Citizen(3, Age.BABY, Health.NORM));

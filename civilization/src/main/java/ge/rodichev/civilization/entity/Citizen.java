@@ -13,8 +13,9 @@ public class Citizen {
     private Factory factory;
     private Health health;
     private static final int TICKS_BETWEEN_MULTIPLIES = 10;
+    private static final int TICK_READY_TO_MULTIPLY = -1;
+
     private int tickWithoutMultiply;
-    private static final int TICKS_BEtWEEN_AGES = 20;
     private int ageTick;
 
     public Citizen() {}
@@ -23,12 +24,25 @@ public class Citizen {
         this.id = id;
         this.age = age;
         this.health = health;
-        this.tickWithoutMultiply = -1;
+        this.tickWithoutMultiply = TICK_READY_TO_MULTIPLY;
         this.ageTick = age.startAgeTick;
     }
 
     public void tick() {
-        if (this.age == Age.DEATH) {
+        processAge();
+        processMultiplyTick();
+    }
+
+    private void processMultiplyTick() {
+        if (this.ableToMultiplyByCooldown()) {
+            this.setTickWithoutMultiply(TICK_READY_TO_MULTIPLY);
+        } else {
+            this.tickWithoutMultiply += 1;
+        }
+    }
+
+    private void processAge() {
+        if (this.age == Age.DEATH) { // TODO remove death check if move citizen tick after manager remove death
             return;
         }
         this.ageTick += 1;
@@ -37,20 +51,12 @@ public class Citizen {
         }
     }
 
-    public void incrementCooldown() {
-        if (this.ableToMultiplyByCooldown()) {
-            this.setTickWithoutMultiply(-1);
-        } else {
-            this.tickWithoutMultiply += 1;
-        }
-    }
-
-    public boolean canMultiply() {
-        return ableToMultiplyByAge() && ableToMultiplyByHealth();
+    public boolean ableToMultiply() {
+        return ableToMultiplyByAge() && ableToMultiplyByHealth() && ableToMultiplyByCooldown();
     }
 
     public boolean ableToMultiplyByCooldown() {
-        return tickWithoutMultiply == -1 || tickWithoutMultiply > TICKS_BETWEEN_MULTIPLIES;
+        return tickWithoutMultiply == TICK_READY_TO_MULTIPLY || tickWithoutMultiply > TICKS_BETWEEN_MULTIPLIES;
     }
 
     public boolean ableToMultiplyByAge() {
