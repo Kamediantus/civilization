@@ -1,23 +1,29 @@
-package ge.rodichev.civilization.entity;
+package ge.rodichev.civilization.manager;
 
 import java.util.*;
 import java.util.logging.*;
 
+import ge.rodichev.civilization.entity.*;
 import ge.rodichev.civilization.entity.consts.*;
 import lombok.*;
+import org.springframework.beans.factory.annotation.*;
 import org.springframework.data.util.*;
 
 @Getter
 @Setter
-public class MultiplyManager {
+public class MultiplyManager extends Manager {
+    @Autowired
     private Citizens citizens;
     private Logger logger;
+
+    public MultiplyManager() {};
 
     public MultiplyManager(Citizens citizens) {
         this.citizens = citizens;
         this.logger = Logger.getLogger("MultiplyManager");
     }
 
+    @Override
     public void tick() {
         removeDeadCitizens();
         Citizens citizensAbleToMultiply = new Citizens();
@@ -25,21 +31,21 @@ public class MultiplyManager {
                 .filter(citizen -> citizen.ableToMultiply())
                 .forEach(citizen -> citizensAbleToMultiply.add(citizen));
 
-//        logger.info(String.format("Citizens ready to multiply: %d", citizensAbleToMultiply.size()));
-//        logger.info(String.format("All citizens: %d", citizens.size()));
-//        logger.info(citizens.getHealthStats());
-//        logger.info(citizens.getAgeStats());
+//        logAllInfo(citizensAbleToMultiply);
         multiplyCitizens(cutCitizens(citizensAbleToMultiply));
-        removeDeadCitizens();
+        removeDeadCitizens(); // removeDeadCitizensWithLog();
     }
 
 
-    public void removeDeadCitizens() {
-//        int startSize = citizens.size();
+    private void removeDeadCitizens() {
         this.citizens.removeIf(citizen -> citizen.getAge() == Age.DEATH);
-//        logger.info(String.format("Dead citizens was removed. Count: %d", startSize - citizens.size()));
     }
 
+    private void removeDeadCitizensWithLog() {
+        int startSize = citizens.size();
+        removeDeadCitizens();
+        logger.info(String.format("Dead citizens was removed. Count: %d", startSize - citizens.size()));
+    }
 
     public void multiplyCitizens(Citizens citizens) {
         if (!citizens.isEmpty()) {
@@ -63,5 +69,12 @@ public class MultiplyManager {
     // TODO implement filtering by health ??
     public static Citizens cutCitizens(Citizens citizens) {
         return new Citizens(citizens.subList(0, citizens.size() / 2 * 2));
+    }
+
+    private void logAllInfo(List<Citizen> citizensAbleToMultiply) {
+        logger.info(String.format("Citizens ready to multiply: %d", citizensAbleToMultiply.size()));
+        logger.info(String.format("All citizens: %d", citizens.size()));
+        logger.info(citizens.getHealthStats());
+        logger.info(citizens.getAgeStats());
     }
 }

@@ -1,11 +1,17 @@
 package ge.rodichev.civilization;
 
+import java.util.*;
+import java.util.stream.*;
+
 import ge.rodichev.civilization.entity.*;
+import ge.rodichev.civilization.entity.building.*;
+import ge.rodichev.civilization.entity.building.factory.housing.*;
 import ge.rodichev.civilization.entity.consts.*;
+import ge.rodichev.civilization.manager.*;
 
 public class TestRunner {
     public static void main(String[] args) {
-        testManager();
+//        testManager();
     }
 
     private static void testManager() {
@@ -17,7 +23,13 @@ public class TestRunner {
         }
     }
 
-    private static Citizens prepareCitizens(boolean seven) {
+    public static List<Housing> prepareHouses(int countBase, int countSecondGrade) {
+        List<Housing> housings = new ArrayList<>();
+        IntStream.of(countBase).forEach((count) -> housings.add(new SimpleHut()));
+        return housings;
+    }
+
+    public static Citizens prepareCitizens(boolean seven) {
         Citizens citizens = new Citizens();
         citizens.add(new Citizen(1, Age.MATURE, Health.NORM));
         citizens.add(new Citizen(2, Age.MATURE, Health.NORM));
