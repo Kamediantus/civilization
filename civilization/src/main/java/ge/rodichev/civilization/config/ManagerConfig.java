@@ -29,9 +29,9 @@ public class ManagerConfig {
         return new Citizens();
     }
 
-//    @Bean
-//    @Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
-//    public RequiredResources requiredResources() {
-//        return new RequiredResources();
-//    }
+    @Bean
+    @Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
+    public ResourceManager resourceManager() {
+        return new ResourceManager();
+    }
 }
