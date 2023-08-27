@@ -26,7 +26,7 @@ public class CivilizationApplication {
         ResourceManager resourceManager = context.getBean(ResourceManager.class);
 
         initCitizens(TestRunner.prepareCitizens(true));
-        initResourceManager(TestRunner.getStartedResourcePack());
+        initResourceManager(ResourcePack.createFilledResourcePack(100));
 
         IntStream.range(0, 100).forEach(i -> {
             context.getBean(Citizens.class).forEach(Citizen::tick);

@@ -1,8 +1,5 @@
-package ge.rodichev.civilization.entity.building;
+package ge.rodichev.civilization.entity.building.housing;
 
-import java.util.*;
-
-import ge.rodichev.civilization.entity.building.factory.housing.*;
 import ge.rodichev.civilization.resource.*;
 import lombok.*;
 

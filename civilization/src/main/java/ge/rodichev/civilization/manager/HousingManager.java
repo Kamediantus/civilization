@@ -1,13 +1,9 @@
 package ge.rodichev.civilization.manager;
 
-import java.lang.reflect.*;
 import java.util.*;
 
-import ge.rodichev.civilization.config.*;
 import ge.rodichev.civilization.entity.*;
-import ge.rodichev.civilization.entity.building.*;
-import ge.rodichev.civilization.entity.building.factory.*;
-import ge.rodichev.civilization.entity.building.factory.housing.*;
+import ge.rodichev.civilization.entity.building.housing.*;
 import ge.rodichev.civilization.resource.*;
 import lombok.*;
 import org.springframework.beans.factory.annotation.*;

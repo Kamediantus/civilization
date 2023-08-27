@@ -10,8 +10,7 @@ public class ResourceManager extends Manager {
     private ResourcePack resourcePack;
 
     public ResourceManager() {
-        resourcePack = new ResourcePack();
-        Arrays.stream(Resource.values()).forEach(res -> resourcePack.put(res, 0));
+        resourcePack = ResourcePack.createEmptyResourcePack();
     }
 
     @Override
@@ -23,23 +22,23 @@ public class ResourceManager extends Manager {
         resourcePack.replace(resource, resourcePack.get(resource) + resourceCount);
     }
 
-    public void degreaseResources(ResourcePack resourcePack) {
-        for (Map.Entry<Resource, Integer> entry: resourcePack.entrySet()) {
+    public void degreaseResources(ResourcePack resourcePack) { //TODO refactor, add check possibility to decrease
+        for (Map.Entry<Resource, Double> entry: resourcePack.entrySet()) {
             degreaseResource(entry.getKey(), entry.getValue());
         }
     }
 
-    public void degreaseResource(Resource resource, int resourceCount) {
+    public void degreaseResource(Resource resource, double resourceCount) {
         resourcePack.replace(resource, resourcePack.get(resource) - resourceCount);
     }
 
-    public boolean hasEnoughResource(Resource resource, int necessaryCount) {
+    public boolean hasEnoughResource(Resource resource, Double necessaryCount) {
         return resourcePack.get(resource) >= necessaryCount;
     }
 
     // TODO write test
     public boolean hasEnoughResources(ResourcePack resourcePack) {
-        for (Map.Entry<Resource, Integer> entry: resourcePack.entrySet()) {
+        for (Map.Entry<Resource, Double> entry: resourcePack.entrySet()) {
             if (!hasEnoughResource(entry.getKey(), entry.getValue())) {
                 return false;
             }

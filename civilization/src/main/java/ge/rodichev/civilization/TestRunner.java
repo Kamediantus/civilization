@@ -4,11 +4,9 @@ import java.util.*;
 import java.util.stream.*;
 
 import ge.rodichev.civilization.entity.*;
-import ge.rodichev.civilization.entity.building.*;
-import ge.rodichev.civilization.entity.building.factory.housing.*;
+import ge.rodichev.civilization.entity.building.housing.*;
 import ge.rodichev.civilization.entity.consts.*;
 import ge.rodichev.civilization.manager.*;
-import ge.rodichev.civilization.resource.*;
 
 public class TestRunner {
     public static void main(String[] args) {
@@ -26,15 +24,8 @@ public class TestRunner {
 
     public static List<Housing> prepareHouses(int countBase, int countSecondGrade) {
         List<Housing> housings = new ArrayList<>();
-        IntStream.of(countBase).forEach((count) -> housings.add(new SimpleHut()));
+        IntStream.range(0, countBase).forEach((count) -> housings.add(new SimpleHut()));
         return housings;
-    }
-
-    public static ResourcePack getStartedResourcePack() {
-        ResourcePack resourcePack = new ResourcePack();
-        resourcePack.put(Resource.WOOD, 100);
-        resourcePack.put(Resource.STONE, 100);
-        return resourcePack;
     }
 
     public static Citizens prepareCitizens(boolean seven) {

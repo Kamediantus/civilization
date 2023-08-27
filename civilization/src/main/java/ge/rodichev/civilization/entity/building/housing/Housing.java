@@ -1,4 +1,4 @@
-package ge.rodichev.civilization.entity.building.factory.housing;
+package ge.rodichev.civilization.entity.building.housing;
 
 import java.util.*;
 

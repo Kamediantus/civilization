@@ -1,7 +1,5 @@
 package ge.rodichev.civilization.entity.building.factory;
 
-import java.util.*;
-
 import ge.rodichev.civilization.entity.*;
 import ge.rodichev.civilization.entity.building.*;
 import ge.rodichev.civilization.resource.*;
@@ -14,12 +12,24 @@ public abstract class Factory extends Building {
     private int maxCitizenCount;
     private Citizens employee;
 
-    abstract ResourcePack getGeneratedResources();
-    public double getGenerationEfficiency() {
-        return employee.size() < requiredCitizenCount
-                ? 0
-                : employee.size() / maxCitizenCount;
+
+    public abstract int getMaxCitizenCount();
+    public abstract int getRequiredCitizenCount();
+    public abstract ResourcePack getMaxGeneratedResourcesPerTick();
+
+    public ResourcePack getActualGeneratedResourcesPerTick() {
+        ResourcePack rawGeneratedResources = getMaxGeneratedResourcesPerTick();
+//        ResourcePack actualGeneratedResources = new ResourcePack();
+
+        rawGeneratedResources.keySet()
+                .forEach(k -> rawGeneratedResources.replace(k,  rawGeneratedResources.get(k) * getGenerationEfficiency()));
+        return rawGeneratedResources;
     }
 
-    abstract int getMaxCitizenCount();
+    public double getGenerationEfficiency() {
+        return getEmployee().size() < getRequiredCitizenCount()
+                ? 0
+                : Double.valueOf(getEmployee().size()) / getMaxCitizenCount();
+    }
+
 }
