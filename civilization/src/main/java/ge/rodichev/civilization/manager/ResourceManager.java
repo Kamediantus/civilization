@@ -18,31 +18,21 @@ public class ResourceManager extends Manager {
 
     }
 
-    public void increaseResource(Resource resource, int resourceCount) {
+    public void increaseResource(Resource resource, double resourceCount) {
         resourcePack.replace(resource, resourcePack.get(resource) + resourceCount);
     }
 
-    public void degreaseResources(ResourcePack resourcePack) { //TODO refactor, add check possibility to decrease
-        for (Map.Entry<Resource, Double> entry: resourcePack.entrySet()) {
-            degreaseResource(entry.getKey(), entry.getValue());
+    public void increaseResources(ResourcePack resourcePackToIncrease) {
+        resourcePack.concatResources(resourcePackToIncrease);
+    }
+
+    public void degreaseResources(ResourcePack resourcePackToSubtract) {
+        if (resourcePack.hasEnoughResources(resourcePack)) {
+            resourcePack.subtractResources(resourcePackToSubtract);
         }
     }
 
     public void degreaseResource(Resource resource, double resourceCount) {
         resourcePack.replace(resource, resourcePack.get(resource) - resourceCount);
-    }
-
-    public boolean hasEnoughResource(Resource resource, Double necessaryCount) {
-        return resourcePack.get(resource) >= necessaryCount;
-    }
-
-    // TODO write test
-    public boolean hasEnoughResources(ResourcePack resourcePack) {
-        for (Map.Entry<Resource, Double> entry: resourcePack.entrySet()) {
-            if (!hasEnoughResource(entry.getKey(), entry.getValue())) {
-                return false;
-            }
-        }
-        return true;
     }
 }

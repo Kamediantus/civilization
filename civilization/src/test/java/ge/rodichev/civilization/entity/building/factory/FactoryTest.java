@@ -13,11 +13,18 @@ public class FactoryTest {
         Factory factory = createBaseFactory(100, 10, 2);
         factory.setEmployee(CitizensUtils.createNormCitizens(2));
         factory.getActualGeneratedResourcesPerTick().forEach((resource, actualCount) -> {
-            assertEquals("Resource gen should be 20% of max(100 per tick * 0,2 == 20)", 20d, actualCount);
+            assertEquals("ResGen should be 20% of max", 20d, actualCount);
         });
+
         factory.setEmployee(CitizensUtils.createNormCitizens(factory.getRequiredCitizenCount() -1));
         factory.getActualGeneratedResourcesPerTick().forEach((resource, actualCount) -> {
-            assertEquals("Resource gen should be zero in case then citizens not enough", 0d, actualCount);
+            assertEquals("ResGen should be zero in case then citizens not enough", 0d, actualCount);
+        });
+
+        factory.setEmployee(CitizensUtils.createNormCitizens(factory.getMaxCitizenCount()));
+
+        factory.getActualGeneratedResourcesPerTick().forEach((resource, actualCount) -> {
+            assertEquals("ResGen should be max in case then citizens count is max", factory.getMaxGeneratedResourcesPerTick().get(resource), actualCount);
         });
     }
 

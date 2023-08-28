@@ -25,7 +25,7 @@ public class HousingManager extends Manager {
 
     @Override
     public void tick() {
-        if (isPreferToBuildHouse() && resourceManager.hasEnoughResources(RequiredResources.RESOURCE_MAP.get(SimpleHut.class))) {
+        if (isPreferToBuildHouse() && resourceManager.getResourcePack().hasEnoughResources(RequiredResources.RESOURCE_MAP.get(SimpleHut.class))) {
             buildSimpleHut();
         }
     }
