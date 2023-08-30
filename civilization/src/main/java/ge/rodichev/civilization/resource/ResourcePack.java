@@ -24,6 +24,20 @@ public class ResourcePack extends HashMap<Resource, Double> {
         resourcePack.keySet().forEach(k -> this.replace(k, this.get(k) - resourcePack.get(k)));
     }
 
+    public static ResourcePack multiplyResources(ResourcePack source, double ratio) {
+        ResourcePack resourcePackWithRatio = ResourcePack.createEmptyResourcePack();
+        resourcePackWithRatio.concatResources(source);
+        resourcePackWithRatio.keySet().forEach(k -> resourcePackWithRatio.replace(k, resourcePackWithRatio.get(k) * ratio));
+        return resourcePackWithRatio;
+    }
+
+    public static ResourcePack multiplyResourcePacks(ResourcePack sourceA, ResourcePack sourceB) {
+        ResourcePack resourcePackWithRatio = ResourcePack.createEmptyResourcePack();
+        resourcePackWithRatio.concatResources(sourceA);
+        resourcePackWithRatio.keySet().forEach(k -> resourcePackWithRatio.replace(k, resourcePackWithRatio.get(k) * sourceB.get(k)));
+        return resourcePackWithRatio;
+    }
+
     public boolean hasEnoughResources(ResourcePack resourcePack) {
         for (Map.Entry<Resource, Double> entry: resourcePack.entrySet()) {
             if (!hasEnoughResource(entry.getKey(), entry.getValue())) {

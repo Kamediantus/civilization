@@ -19,7 +19,6 @@ public abstract class Factory extends Building {
 
     public ResourcePack getActualGeneratedResourcesPerTick() {
         ResourcePack rawGeneratedResources = getMaxGeneratedResourcesPerTick();
-//        ResourcePack actualGeneratedResources = new ResourcePack();
 
         rawGeneratedResources.keySet()
                 .forEach(k -> rawGeneratedResources.replace(k,  rawGeneratedResources.get(k) * getGenerationEfficiency()));

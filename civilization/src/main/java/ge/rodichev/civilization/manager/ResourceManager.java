@@ -1,7 +1,5 @@
 package ge.rodichev.civilization.manager;
 
-import java.util.*;
-
 import ge.rodichev.civilization.resource.*;
 import lombok.*;
 
@@ -13,17 +11,21 @@ public class ResourceManager extends Manager {
         resourcePack = ResourcePack.createEmptyResourcePack();
     }
 
+    public ResourceManager(ResourcePack resourcePack) {
+        this.resourcePack = resourcePack;
+    }
+
     @Override
     public void tick() {
 
     }
 
-    public void increaseResource(Resource resource, double resourceCount) {
-        resourcePack.replace(resource, resourcePack.get(resource) + resourceCount);
-    }
-
     public void increaseResources(ResourcePack resourcePackToIncrease) {
         resourcePack.concatResources(resourcePackToIncrease);
+    }
+
+    public void increaseResource(Resource resource, double resourceCount) {
+        resourcePack.replace(resource, resourcePack.get(resource) + resourceCount);
     }
 
     public void degreaseResources(ResourcePack resourcePackToSubtract) {
