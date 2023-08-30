@@ -1,17 +1,14 @@
 package ge.rodichev.civilization;
 
 
-import java.util.*;
 import java.util.stream.*;
 
 import ge.rodichev.civilization.config.*;
 import ge.rodichev.civilization.entity.*;
 import ge.rodichev.civilization.manager.*;
 import ge.rodichev.civilization.resource.*;
-import org.springframework.beans.factory.annotation.*;
 import org.springframework.boot.*;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.*;
+import org.springframework.boot.autoconfigure.*;
 import org.springframework.context.annotation.*;
 
 @SpringBootApplication
@@ -23,7 +20,7 @@ public class CivilizationApplication {
 		SpringApplication.run(CivilizationApplication.class, args);
         MultiplyManager multiplyManager = context.getBean(MultiplyManager.class);
         HousingManager housingManager = context.getBean(HousingManager.class);
-        ResourceManager resourceManager = context.getBean(ResourceManager.class);
+        FactoryManager factoryManager = context.getBean(FactoryManager.class);
 
         initCitizens(TestRunner.prepareCitizens(true));
         initResourceManager(ResourcePack.createFilledResourcePack(100));
@@ -32,9 +29,30 @@ public class CivilizationApplication {
             context.getBean(Citizens.class).forEach(Citizen::tick);
             multiplyManager.tick();
             housingManager.tick();
+            factoryManager.tick();
         });
-        System.out.println();
 
+        IntStream.range(100, 200).forEach(i -> {
+            context.getBean(Citizens.class).forEach(Citizen::tick);
+            multiplyManager.tick();
+            housingManager.tick();
+            factoryManager.tick();
+        });
+
+        IntStream.range(200, 300).forEach(i -> {
+            context.getBean(Citizens.class).forEach(Citizen::tick);
+            multiplyManager.tick();
+            housingManager.tick();
+            factoryManager.tick();
+        });
+
+        IntStream.range(300, 400).forEach(i -> {
+            context.getBean(Citizens.class).forEach(Citizen::tick);
+            multiplyManager.tick();
+            housingManager.tick();
+            factoryManager.tick();
+        });
+        System.out.println("ss");
 	}
 
     public static void initCitizens(Citizens citizensToAdd) {

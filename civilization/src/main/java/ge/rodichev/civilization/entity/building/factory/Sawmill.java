@@ -5,7 +5,7 @@ import ge.rodichev.civilization.resource.*;
 public class Sawmill extends Factory {
     @Override
     public int getRequiredCitizenCount() {
-        return 2;
+        return RequiredResources.CITIZENS_MAP.get(Sawmill.class);
     }
 
     @Override

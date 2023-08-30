@@ -16,8 +16,6 @@ public class MultiplyManager extends Manager {
     private Citizens citizens;
     private Logger logger;
 
-    public MultiplyManager() {};
-
     public MultiplyManager(Citizens citizens) {
         this.citizens = citizens;
         this.logger = Logger.getLogger("MultiplyManager");
@@ -25,15 +23,14 @@ public class MultiplyManager extends Manager {
 
     @Override
     public void tick() {
-        removeDeadCitizens();
+        removeDeadCitizens();         // removeDeadCitizensWithLog();
         Citizens citizensAbleToMultiply = new Citizens();
         this.citizens.stream()
-                .filter(citizen -> citizen.ableToMultiply())
-                .forEach(citizen -> citizensAbleToMultiply.add(citizen));
+                .filter(Citizen::ableToMultiply)
+                .forEach(citizensAbleToMultiply::add);
 
 //        logAllInfo(citizensAbleToMultiply);
         multiplyCitizens(cutCitizens(citizensAbleToMultiply));
-        removeDeadCitizens(); // removeDeadCitizensWithLog();
     }
 
 

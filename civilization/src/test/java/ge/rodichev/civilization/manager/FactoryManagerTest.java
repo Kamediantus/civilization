@@ -24,7 +24,7 @@ class FactoryManagerTest {
 
         when(manager.getResourceManager()).thenReturn(new ResourceManager(ResourcePackUtil.createResourcePack(100, 25)));
 
-        ResourcePack resourceValue = manager.getResourceValue(manager.getProducedResourcesPerTick());
+        ResourcePack resourceValue = manager.getResourcesValue(manager.getProducedResourcesPerTick());
         assertEquals("Wood in high priority",500d, resourceValue.get(Resource.WOOD));
         assertEquals("Wood in high priority",375d, resourceValue.get(Resource.STONE));
     }

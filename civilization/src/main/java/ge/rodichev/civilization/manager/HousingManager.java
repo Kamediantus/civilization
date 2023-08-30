@@ -12,14 +12,17 @@ import org.springframework.beans.factory.annotation.*;
 @Setter
 public class HousingManager extends Manager {
     public static final double PERCENTAGE_TO_PREFER_BUILD = 0.75d;
-    private ArrayList<Housing> housings;
+    private ArrayList<Housing> housings; //TODO decide: probably it is no need to store all buildings
+    private int housingCapacity;
     @Autowired
     private Citizens citizens;
     @Autowired
     private ResourceManager resourceManager;
 
     public HousingManager() {
+        this.housingCapacity = 0;
         this.housings = new ArrayList<>();
+        buildSimpleHut();
     }
 
 
@@ -36,10 +39,6 @@ public class HousingManager extends Manager {
                 : Double.valueOf(this.citizens.size()) / getHousingCapacity();
     }
 
-    public int getHousingCapacity() {
-        return this.housings.stream().map(housing -> housing.getCapacity()).reduce(0, Integer::sum);
-    }
-
     private boolean isPreferToBuildHouse() {
         return getHousingFilledPercentage() > PERCENTAGE_TO_PREFER_BUILD;
     }
@@ -49,5 +48,6 @@ public class HousingManager extends Manager {
         resourceManager.degreaseResources(RequiredResources.RESOURCE_MAP.get(SimpleHut.class));
         SimpleHut simpleHut = new SimpleHut();
         housings.add(simpleHut);
+        this.housingCapacity += simpleHut.getCapacity();
     }
 }

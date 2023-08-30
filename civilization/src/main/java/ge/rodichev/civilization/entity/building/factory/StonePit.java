@@ -20,6 +20,6 @@ public class StonePit extends Factory {
 
     @Override
     public int getRequiredCitizenCount() {
-        return 4;
+        return RequiredResources.CITIZENS_MAP.get(StonePit.class);
     }
 }

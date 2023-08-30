@@ -2,7 +2,6 @@ package ge.rodichev.civilization.config;
 
 import ge.rodichev.civilization.entity.*;
 import ge.rodichev.civilization.manager.*;
-import ge.rodichev.civilization.resource.*;
 import org.springframework.beans.factory.config.*;
 import org.springframework.context.annotation.*;
 import org.springframework.context.annotation.Scope;
@@ -33,5 +32,11 @@ public class ManagerConfig {
     @Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
     public ResourceManager resourceManager() {
         return new ResourceManager();
+    }
+
+    @Bean
+    @Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
+    public FactoryManager factoryManager() {
+        return new FactoryManager();
     }
 }

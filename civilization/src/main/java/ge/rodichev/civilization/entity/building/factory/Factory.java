@@ -8,17 +8,18 @@ import lombok.*;
 @Getter
 @Setter
 public abstract class Factory extends Building {
-    private int requiredCitizenCount;
-    private int maxCitizenCount;
     private Citizens employee;
 
+    protected Factory() {
+        this.employee = new Citizens();
+    }
 
     public abstract int getMaxCitizenCount();
     public abstract int getRequiredCitizenCount();
     public abstract ResourcePack getMaxGeneratedResourcesPerTick();
 
     public ResourcePack getActualGeneratedResourcesPerTick() {
-        ResourcePack rawGeneratedResources = getMaxGeneratedResourcesPerTick();
+        ResourcePack rawGeneratedResources = (ResourcePack) getMaxGeneratedResourcesPerTick().clone();
 
         rawGeneratedResources.keySet()
                 .forEach(k -> rawGeneratedResources.replace(k,  rawGeneratedResources.get(k) * getGenerationEfficiency()));
