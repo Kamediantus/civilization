@@ -13,10 +13,14 @@ import org.springframework.data.util.*;
 @Getter
 @Setter
 public class MultiplyManager extends Manager implements DeadProcessing {
-    @Autowired
-    private Citizens citizens;
     private Citizens deadCitizens;
     private Logger logger;
+
+    @Autowired
+    private Citizens citizens;
+
+    @Autowired
+    HousingManager housingManager;
 
     public MultiplyManager() {
         this.logger = Logger.getLogger("MultiplyManager");
@@ -33,6 +37,7 @@ public class MultiplyManager extends Manager implements DeadProcessing {
         Citizens citizensAbleToMultiply = new Citizens();
         this.citizens.stream()
                 .filter(Citizen::ableToMultiply)
+                .takeWhile(citizen -> citizensAbleToMultiply.size() / 2 < housingManager.getHousingCapacity() - citizens.size()) // TODO add test on takeWhile. Probably should compare with capacity -1
                 .forEach(citizensAbleToMultiply::add);
 
 //        logAllInfo(citizensAbleToMultiply);
