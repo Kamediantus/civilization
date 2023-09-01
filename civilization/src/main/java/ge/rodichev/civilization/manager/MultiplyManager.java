@@ -4,6 +4,7 @@ import java.util.*;
 import java.util.logging.*;
 
 import ge.rodichev.civilization.entity.*;
+import ge.rodichev.civilization.entity.building.*;
 import ge.rodichev.civilization.entity.consts.*;
 import lombok.*;
 import org.springframework.beans.factory.annotation.*;
@@ -11,10 +12,15 @@ import org.springframework.data.util.*;
 
 @Getter
 @Setter
-public class MultiplyManager extends Manager {
+public class MultiplyManager extends Manager implements DeadProcessing {
     @Autowired
     private Citizens citizens;
+    private Citizens deadCitizens;
     private Logger logger;
+
+    public MultiplyManager() {
+        this.logger = Logger.getLogger("MultiplyManager");
+    }
 
     public MultiplyManager(Citizens citizens) {
         this.citizens = citizens;
@@ -33,9 +39,10 @@ public class MultiplyManager extends Manager {
         multiplyCitizens(cutCitizens(citizensAbleToMultiply));
     }
 
-
-    private void removeDeadCitizens() {
-        this.citizens.removeIf(citizen -> citizen.getAge() == Age.DEATH);
+    @Override
+    public void removeDeadCitizens() {
+        this.deadCitizens = this.citizens.filterByAge(Age.DEATH);
+        this.citizens.removeAll(deadCitizens);
     }
 
     private void removeDeadCitizensWithLog() {

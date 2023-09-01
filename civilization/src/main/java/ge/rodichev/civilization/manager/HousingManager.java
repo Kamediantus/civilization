@@ -22,7 +22,6 @@ public class HousingManager extends Manager {
     public HousingManager() {
         this.housingCapacity = 0;
         this.housings = new ArrayList<>();
-        buildSimpleHut();
     }
 
 
@@ -44,7 +43,7 @@ public class HousingManager extends Manager {
     }
 
     // TODO make transactional
-    private void buildSimpleHut() {
+    public void buildSimpleHut() {
         resourceManager.degreaseResources(RequiredResources.RESOURCE_MAP.get(SimpleHut.class));
         SimpleHut simpleHut = new SimpleHut();
         housings.add(simpleHut);

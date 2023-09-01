@@ -39,6 +39,6 @@ public class Citizens extends ArrayList<Citizen> {
     }
 
     public Citizens getFreeToWorkCitizens() { //TODO add filtering by age and health
-        return new Citizens(this.stream().filter(citizen -> citizen.getFactory() == null).toList());
+        return new Citizens(this.stream().filter(citizen -> citizen.getAge() == Age.MATURE && citizen.getFactory() == null).toList());
     }
 }

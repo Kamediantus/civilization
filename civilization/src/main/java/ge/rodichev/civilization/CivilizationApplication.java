@@ -21,6 +21,7 @@ public class CivilizationApplication {
         MultiplyManager multiplyManager = context.getBean(MultiplyManager.class);
         HousingManager housingManager = context.getBean(HousingManager.class);
         FactoryManager factoryManager = context.getBean(FactoryManager.class);
+        housingManager.buildSimpleHut();
 
         initCitizens(TestRunner.prepareCitizens(true));
         initResourceManager(ResourcePack.createFilledResourcePack(100));

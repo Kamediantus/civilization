@@ -3,18 +3,23 @@ package ge.rodichev.civilization.manager;
 import java.util.*;
 
 import ge.rodichev.civilization.entity.*;
+import ge.rodichev.civilization.entity.building.*;
 import ge.rodichev.civilization.entity.building.factory.*;
 import ge.rodichev.civilization.entity.building.housing.*;
+import ge.rodichev.civilization.entity.consts.*;
 import ge.rodichev.civilization.resource.*;
 import lombok.*;
 import org.springframework.beans.factory.annotation.*;
 
 @Getter
 @Setter
-public class FactoryManager {
+public class FactoryManager extends Manager implements DeadProcessing {
     private List<Factory> factories;
     private Citizens freeToWorkCitizens;
     private Map<Resource, Class<? extends Factory>> resourceFactoryMap;
+
+    @Autowired
+    MultiplyManager multiplyManager;
 
     @Autowired
     Citizens citizens;
@@ -27,7 +32,9 @@ public class FactoryManager {
         this.resourceFactoryMap = createResourceFactoryMap();
     }
 
+    @Override
     public void tick() {
+        removeDeadCitizens();
         ResourcePack producedResources = getProducedResourcesPerTick();
         this.freeToWorkCitizens = citizens.getFreeToWorkCitizens();
         if (!freeToWorkCitizens.isEmpty()) {
@@ -40,16 +47,25 @@ public class FactoryManager {
         getResourceManager().getResourcePack().concatResources(producedResources);
     }
 
+    // remove not dead but elderly citizens
+    @Override
+    public void removeDeadCitizens() {
+        this.citizens.stream().filter(citizen -> citizen.getAge() == Age.ELDERLY && citizen.getFactory() != null)
+                .forEach(citizen -> {
+                    citizen.getFactory().getEmployee().remove(citizen);
+                    citizen.setFactory(null);
+                });
+    }
+
     protected void addCitizensToFactories(Resource mostValuableResource) {
+        Iterator<Citizen> iterator = freeToWorkCitizens.iterator();
         factories.stream().filter(factory -> factory.getClass() == getResourceFactoryMap().get(mostValuableResource)
                         && factory.getEmployee().size() < factory.getMaxCitizenCount())
                 .forEach(factory -> {
-                    Optional<Citizen> newEmployeeOptional = freeToWorkCitizens.stream().findFirst();
-                    if (newEmployeeOptional.isPresent()) {
-                        Citizen newEmployee = newEmployeeOptional.get();
+                    while (iterator.hasNext() && factory.getEmployee().size() < factory.getMaxCitizenCount()) {
+                        Citizen newEmployee = iterator.next();
                         factory.getEmployee().add(newEmployee);
                         newEmployee.setFactory(factory);
-                        freeToWorkCitizens.remove(newEmployee);
                     }
                 });
     }
