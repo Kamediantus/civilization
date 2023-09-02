@@ -13,10 +13,13 @@ public class RequiredResources {
     public static final Map<Class<? extends Building>, ResourcePack> RESOURCE_MAP = getRequiredResourcesMap();
     public static final Map<Class<? extends Factory>, Integer> CITIZENS_MAP = getRequiredCitizensMap();
 
+    private RequiredResources(){}
+
     public static Map<Class<? extends Factory>, Integer> getRequiredCitizensMap() {
         Map<Class<? extends Factory>, Integer> resourceMap = new HashMap<>();
         resourceMap.put(Sawmill.class, 2);
         resourceMap.put(StonePit.class, 4);
+        resourceMap.put(ConstructionWorkshop.class, 4);
 
         return resourceMap;
     }
@@ -26,28 +29,36 @@ public class RequiredResources {
         resourceMap.put(SimpleHut.class, getSimpleHutRequiredResources());
         resourceMap.put(Sawmill.class, getSawmillRequiredResources());
         resourceMap.put(StonePit.class, getStonePitRequiredResources());
+        resourceMap.put(ConstructionWorkshop.class, getConstructionWorkshopRequiredResources());
 
         return resourceMap;
     }
 
     public static ResourcePack getSawmillRequiredResources() {
-        ResourcePack resourcePack = new ResourcePack();
-        resourcePack.put(Resource.WOOD, 10d);
-        resourcePack.put(Resource.STONE, 5d);
-        return resourcePack;
+        return new ResourcePack()
+                .add(Resource.WOOD, 10d)
+                .add(Resource.STONE, 5d)
+                .add(Resource.WORKFORCE, 2d);
     }
 
     public static ResourcePack getSimpleHutRequiredResources() {
-        ResourcePack resourcePack = new ResourcePack();
-        resourcePack.put(Resource.WOOD, 8d);
-        resourcePack.put(Resource.STONE, 5d);
-        return resourcePack;
+        return new ResourcePack()
+                .add(Resource.WOOD, 8d)
+                .add(Resource.STONE, 5d)
+                .add(Resource.WORKFORCE, 2d);
     }
 
     public static ResourcePack getStonePitRequiredResources() {
-        ResourcePack resourcePack = new ResourcePack();
-        resourcePack.put(Resource.WOOD, 10d);
-        resourcePack.put(Resource.STONE, 15d);
-        return resourcePack;
+        return new ResourcePack()
+                .add(Resource.WOOD, 10d)
+                .add(Resource.STONE, 15d)
+                .add(Resource.WORKFORCE, 4d);
+    }
+
+    public static ResourcePack getConstructionWorkshopRequiredResources() {
+        return new ResourcePack()
+                .add(Resource.WOOD, 25d)
+                .add(Resource.STONE, 20d)
+                .add(Resource.WORKFORCE, 1d);
     }
 }

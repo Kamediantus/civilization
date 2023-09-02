@@ -10,16 +10,6 @@ import ge.rodichev.civilization.manager.*;
 
 public class TestRunner {
     public static void main(String[] args) {
-//        testManager();
-    }
-
-    private static void testManager() {
-        MultiplyManager manager = new MultiplyManager(prepareCitizens(true));
-        for (int i = 0; i < 500; i++) {
-            manager.getCitizens().forEach(Citizen::tick);
-            manager.tick();
-            System.out.println(manager.getCitizens().size());
-        }
     }
 
     public static List<Housing> prepareHouses(int countBase, int countSecondGrade) {

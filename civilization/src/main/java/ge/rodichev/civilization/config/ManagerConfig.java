@@ -39,4 +39,10 @@ public class ManagerConfig {
     public FactoryManager factoryManager() {
         return new FactoryManager();
     }
+
+    @Bean
+    @Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
+    public CitizensManager citizensManager() {
+        return new CitizensManager();
+    }
 }

@@ -18,6 +18,10 @@ public abstract class Factory extends Building {
     public abstract int getRequiredCitizenCount();
     public abstract ResourcePack getMaxGeneratedResourcesPerTick();
 
+    public boolean isProduceBurnedResource() {
+        return false;
+    }
+
     public ResourcePack getActualGeneratedResourcesPerTick() {
         ResourcePack rawGeneratedResources = (ResourcePack) getMaxGeneratedResourcesPerTick().clone();
 

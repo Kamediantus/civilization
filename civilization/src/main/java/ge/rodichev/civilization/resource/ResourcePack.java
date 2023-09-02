@@ -10,6 +10,11 @@ public class ResourcePack extends HashMap<Resource, Double> {
         return resourcePack;
     }
 
+    public ResourcePack add(Resource resource, Double count) {
+        this.put(resource, count);
+        return this;
+    }
+
     public static ResourcePack createFilledResourcePack(double initResourceCount) {
         ResourcePack resourcePack = new ResourcePack();
         Arrays.stream(Resource.values()).forEach(resource -> resourcePack.put(resource, initResourceCount));

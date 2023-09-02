@@ -21,34 +21,35 @@ public class CivilizationApplication {
         MultiplyManager multiplyManager = context.getBean(MultiplyManager.class);
         HousingManager housingManager = context.getBean(HousingManager.class);
         FactoryManager factoryManager = context.getBean(FactoryManager.class);
+        CitizensManager citizensManager = context.getBean(CitizensManager.class);
         housingManager.buildSimpleHut();
 
         initCitizens(TestRunner.prepareCitizens(true));
         initResourceManager(ResourcePack.createFilledResourcePack(100));
 
         IntStream.range(0, 100).forEach(i -> {
-            context.getBean(Citizens.class).forEach(Citizen::tick);
+            citizensManager.tick();
             multiplyManager.tick();
             housingManager.tick();
             factoryManager.tick();
         });
 
         IntStream.range(100, 200).forEach(i -> {
-            context.getBean(Citizens.class).forEach(Citizen::tick);
+            citizensManager.tick();
             multiplyManager.tick();
             housingManager.tick();
             factoryManager.tick();
         });
 
         IntStream.range(200, 300).forEach(i -> {
-            context.getBean(Citizens.class).forEach(Citizen::tick);
+            citizensManager.tick();
             multiplyManager.tick();
             housingManager.tick();
             factoryManager.tick();
         });
 
         IntStream.range(300, 400).forEach(i -> {
-            context.getBean(Citizens.class).forEach(Citizen::tick);
+            citizensManager.tick();
             multiplyManager.tick();
             housingManager.tick();
             factoryManager.tick();
