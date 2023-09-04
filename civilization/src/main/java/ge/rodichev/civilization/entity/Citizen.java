@@ -29,8 +29,10 @@ public class Citizen {
     }
 
     public void tick() {
-        processAge();
-        processMultiplyTick();
+        Age currentAge = processAge();
+        if (currentAge != Age.DEATH) {
+            processMultiplyTick();
+        }
     }
 
     private void processMultiplyTick() {
@@ -41,14 +43,14 @@ public class Citizen {
         }
     }
 
-    private void processAge() {
-        if (this.age == Age.DEATH) { // TODO remove death check if move citizen tick after manager remove death
-            return;
+    private Age processAge() {
+        if (this.age != Age.DEATH) { // TODO remove death check if move citizen tick after manager remove death
+            this.ageTick += 1;
+            if (this.age.getNextAgeStartTick() == this.ageTick) {
+                this.setAge(age.getNextAge());
+            }
         }
-        this.ageTick += 1;
-        if (this.age.getNextAgeStartTick() == this.ageTick) {
-            this.setAge(age.getNextAge());
-        }
+        return this.age;
     }
 
     public boolean ableToMultiply() {

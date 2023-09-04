@@ -50,21 +50,13 @@ public class MultiplyManager extends Manager {
 
     private List<Pair<Citizen, Citizen>> groupCitizensByPairs(Citizens singleCitizens) {
         List<Pair<Citizen, Citizen>> pairs = new ArrayList<>();
-        for (int i = 0; i <= singleCitizens.size() - 2; i ++) {
+        for (int i = 0; i <= singleCitizens.size() - 2; i += 2) {
             pairs.add(Pair.of(singleCitizens.get(i), singleCitizens.get(i+1)));
         }
         return pairs;
     }
 
-    // TODO implement filtering by health ??
     public static Citizens cutCitizens(Citizens citizens) {
         return new Citizens(citizens.subList(0, citizens.size() / 2 * 2));
-    }
-
-    private void logAllInfo(List<Citizen> citizensAbleToMultiply) {
-        logger.info(String.format("Citizens ready to multiply: %d", citizensAbleToMultiply.size()));
-        logger.info(String.format("All citizens: %d", citizens.size()));
-        logger.info(citizens.getHealthStats());
-        logger.info(citizens.getAgeStats());
     }
 }

@@ -1,6 +1,7 @@
 package ge.rodichev.civilization.config;
 
 import ge.rodichev.civilization.entity.*;
+import ge.rodichev.civilization.entity.building.factory.*;
 import ge.rodichev.civilization.manager.*;
 import org.springframework.beans.factory.config.*;
 import org.springframework.context.annotation.*;
@@ -26,6 +27,12 @@ public class ManagerConfig {
     @Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
     public Citizens citizens() {
         return new Citizens();
+    }
+
+    @Bean
+    @Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
+    public Factories factories() {
+        return new Factories();
     }
 
     @Bean

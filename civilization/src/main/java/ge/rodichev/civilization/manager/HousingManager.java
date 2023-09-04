@@ -2,7 +2,6 @@ package ge.rodichev.civilization.manager;
 
 import java.util.*;
 
-import ge.rodichev.civilization.entity.*;
 import ge.rodichev.civilization.entity.building.housing.*;
 import ge.rodichev.civilization.resource.*;
 import lombok.*;
@@ -14,21 +13,26 @@ public class HousingManager extends Manager {
     public static final double PERCENTAGE_TO_PREFER_BUILD = 0.75d;
     private ArrayList<Housing> housings; //TODO decide: probably it is no need to store all buildings
     private int housingCapacity;
-    @Autowired
-    private Citizens citizens;
+    private int ticksAfterLastBuild;
+
     @Autowired
     private ResourceManager resourceManager;
 
     public HousingManager() {
         this.housingCapacity = 0;
+        this.ticksAfterLastBuild = -1;
         this.housings = new ArrayList<>();
     }
 
-
     @Override
     public void tick() {
-        if (isPreferToBuildHouse() && resourceManager.getResourcePack().hasEnoughResources(RequiredResources.RESOURCE_MAP.get(SimpleHut.class))) {
+        if (isPreferToBuildHouse()
+                && resourceManager.getResourcePack().hasEnoughResources(RequiredResources.RESOURCE_MAP.get(SimpleHut.class))
+                && ticksAfterLastBuild == -1) {
             buildSimpleHut();
+            ticksAfterLastBuild += 1;
+        } else {
+            ticksAfterLastBuild = ticksAfterLastBuild == 2 ? -1 : ticksAfterLastBuild + 1;
         }
     }
 
