@@ -22,9 +22,6 @@ public class FactoryManager extends Manager implements DeadProcessing {
     Factories factories;
 
     @Autowired
-    MultiplyManager multiplyManager;
-
-    @Autowired
     ResourceManager resourceManager;
 
     @Autowired
@@ -39,8 +36,8 @@ public class FactoryManager extends Manager implements DeadProcessing {
     public void tick() {
         removeDeadCitizens();
 
-        ResourcePack producedCommonResources = resourceManager.getCommonResourcesCurrentTick();
-        iterator = citizensManager.getReadyToWorkCitizens().iterator();
+        ResourcePack producedCommonResources = getResourceManager().getCommonResourcesCurrentTick();
+        iterator = getCitizensManager().getReadyToWorkCitizens().iterator();
         boolean addedToExistingFactory = true;
         boolean builtNewFactory = true;
         Resource mostValuableResource = getMostValuableResourceToImprove(getResourcesValue(producedCommonResources));
@@ -63,7 +60,7 @@ public class FactoryManager extends Manager implements DeadProcessing {
     // true if added
     protected boolean addCitizensToFactories(Resource mostValuableResource) {
         AtomicBoolean added = new AtomicBoolean(false);
-        factories.stream().filter(factory -> factory.getClass() == getResourceFactoryMap().get(mostValuableResource)
+        getFactories().stream().filter(factory -> factory.getClass() == getResourceFactoryMap().get(mostValuableResource)
                         && factory.getEmployee().size() < factory.getMaxCitizenCount())
                 .forEach(factory -> {
                     while (iterator.hasNext() && factory.getEmployee().size() < factory.getMaxCitizenCount()) {
@@ -91,7 +88,7 @@ public class FactoryManager extends Manager implements DeadProcessing {
     }
 
     protected void build(Factory factoryToBuild) {
-        resourceManager.degreaseResources(factoryToBuild.getRequiredResourcesForBuild());
+        getResourceManager().degreaseResources(factoryToBuild.getRequiredResourcesForBuild());
         List<Citizen> employees = new ArrayList<>();
         while (iterator.hasNext() && employees.size() < factoryToBuild.getMaxCitizenCount() / 2) {
             employees.add(iterator.next());
@@ -99,13 +96,13 @@ public class FactoryManager extends Manager implements DeadProcessing {
 
         factoryToBuild.getEmployee().addAll(employees);
         employees.forEach(citizen -> citizen.setFactory(factoryToBuild));
-        this.factories.add(factoryToBuild);
+        getFactories().add(factoryToBuild);
     }
 
     // return init employee for new building. If iterator has no enough citizens or resources not enough - return empty list
     protected Citizens ableToBuild(Class<? extends Factory> buildClass) {
         Citizens initEmployees = new Citizens();
-        if (!resourceManager.getResourcePack().hasEnoughResources(RequiredResources.RESOURCE_MAP.get(buildClass))) {
+        if (!getResourceManager().getResourcePack().hasEnoughResources(RequiredResources.RESOURCE_MAP.get(buildClass))) {
             return initEmployees;
         } else {
             while (iterator.hasNext() && initEmployees.size() < RequiredResources.CITIZENS_MAP.get(buildClass)) {
@@ -136,10 +133,10 @@ public class FactoryManager extends Manager implements DeadProcessing {
         ResourcePack genResourcesWithRatio = ResourcePack.multiplyResources(actualGenPerTick, 5);
         ResourcePack valueResourcePack = ResourcePack.multiplyResourcePacks(resourcePackWithRatio, genResourcesWithRatio);
 
-        factories.stream().filter(Factory::isProduceBurnedResource)
+        getFactories().stream().filter(Factory::isProduceBurnedResource)
                 .forEach(factory -> {
                     Resource burningResource = factoryResourceMap.get(factory.getClass());
-                    valueResourcePack.put(burningResource, resourceManager.getResidueOfBurningResourcesFromPreviousTick().get(burningResource));
+                    valueResourcePack.put(burningResource, getResourceManager().getResidueOfBurningResourcesFromPreviousTick().get(burningResource));
                 });
         return valueResourcePack;
     }

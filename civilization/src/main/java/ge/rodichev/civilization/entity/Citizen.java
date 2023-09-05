@@ -12,8 +12,8 @@ public class Citizen {
     private Education education;
     private Factory factory;
     private Health health;
-    private static final int TICKS_BETWEEN_MULTIPLIES = 10;
-    private static final int TICK_READY_TO_MULTIPLY = -1;
+    protected static final int TICKS_BETWEEN_MULTIPLIES = 10;
+    protected static final int TICK_READY_TO_MULTIPLY = -1;
 
     private int tickWithoutMultiply;
     private int ageTick;
@@ -25,7 +25,7 @@ public class Citizen {
         this.age = age;
         this.health = health;
         this.tickWithoutMultiply = TICK_READY_TO_MULTIPLY;
-        this.ageTick = age.startAgeTick;
+        this.ageTick = age.getStartAgeTick();
     }
 
     public void tick() {
@@ -35,7 +35,7 @@ public class Citizen {
         }
     }
 
-    private void processMultiplyTick() {
+    protected void processMultiplyTick() {
         if (this.ableToMultiplyByCooldown()) {
             this.setTickWithoutMultiply(TICK_READY_TO_MULTIPLY);
         } else {
@@ -47,7 +47,7 @@ public class Citizen {
         if (this.age != Age.DEATH) { // TODO remove death check if move citizen tick after manager remove death
             this.ageTick += 1;
             if (this.age.getNextAgeStartTick() == this.ageTick) {
-                this.setAge(age.getNextAge());
+                this.age = age.getNextAge();
             }
         }
         return this.age;
@@ -67,5 +67,10 @@ public class Citizen {
 
     public boolean ableToMultiplyByHealth() {
         return this.health == Health.ATHLETIC || this.health == Health.NORM;
+    }
+
+    public void setAge(Age age) {
+        this.age = age;
+        this.ageTick = age.getStartAgeTick();
     }
 }

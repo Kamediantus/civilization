@@ -4,6 +4,7 @@ import ge.rodichev.civilization.resource.*;
 
 
 public class ConstructionWorkshop extends Factory {
+    private static final int MAX_CITIZENS = 20;
     @Override
     public boolean isProduceBurnedResource() {
         return true;
@@ -16,7 +17,7 @@ public class ConstructionWorkshop extends Factory {
 
     @Override
     public int getMaxCitizenCount() {
-        return 20;
+        return MAX_CITIZENS;
     }
 
     @Override

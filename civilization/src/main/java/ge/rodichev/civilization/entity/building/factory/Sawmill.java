@@ -3,6 +3,7 @@ package ge.rodichev.civilization.entity.building.factory;
 import ge.rodichev.civilization.resource.*;
 
 public class Sawmill extends Factory {
+    private static final int MAX_CITIZENS = 10;
     @Override
     public int getRequiredCitizenCount() {
         return RequiredResources.CITIZENS_MAP.get(Sawmill.class);
@@ -20,6 +21,6 @@ public class Sawmill extends Factory {
 
     @Override
     public int getMaxCitizenCount() {
-        return 10;
+        return MAX_CITIZENS;
     }
 }

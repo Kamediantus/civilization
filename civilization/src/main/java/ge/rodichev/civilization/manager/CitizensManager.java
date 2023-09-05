@@ -19,14 +19,14 @@ public class CitizensManager extends Manager implements DeadProcessing {
 
     @Override
     public void tick() {
-        citizens.forEach(Citizen::tick);
+        getCitizens().forEach(Citizen::tick);
         removeDeadCitizens();
-        this.readyToWorkCitizens = citizens.getFreeToWorkCitizens();
+        this.readyToWorkCitizens = getCitizens().getFreeToWorkCitizens();
     }
 
     @Override
     public void removeDeadCitizens() {
-        this.deadCitizens = this.citizens.filterByAge(Age.DEATH);
-        this.citizens.removeAll(deadCitizens);
+        this.deadCitizens = getCitizens().filterByAge(Age.DEATH);
+        getCitizens().removeAll(deadCitizens);
     }
 }

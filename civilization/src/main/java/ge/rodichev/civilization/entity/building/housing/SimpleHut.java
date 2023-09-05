@@ -6,10 +6,11 @@ import lombok.*;
 @Getter
 @Setter
 public class SimpleHut extends Housing {
+    private static final int CAPACITY = 10;
 
     @Override
     public int getCapacity() {
-        return 10;
+        return CAPACITY;
     }
 
     @Override

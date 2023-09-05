@@ -12,20 +12,24 @@ class FactoryManagerTest {
 
     @Test
     void testGetValueOfExistingResources() {
-        FactoryManager manager = spy(new FactoryManager());
+        FactoryManager factoryManager = spy(new FactoryManager());
+        ResourceManager resourceManager = spy(new ResourceManager(ResourcePackUtil.createResourcePack(100, 25)));
+        Factories factories = new Factories();
+        when(factoryManager.getFactories()).thenReturn(factories);
+        when(resourceManager.getFactories()).thenReturn(factories);
+        when(factoryManager.getResourceManager()).thenReturn(resourceManager);
+
         Factory stoneFactory = FactoryUtil.createBaseFactory(ResourcePackUtil.createResourcePack(0, 30), 10, 2);
         stoneFactory.setEmployee(CitizensUtils.createNormCitizens(stoneFactory.getMaxCitizenCount()));
-
         Factory woodFactory = FactoryUtil.createBaseFactory(ResourcePackUtil.createResourcePack(10, 0), 10, 2);
         woodFactory.setEmployee(CitizensUtils.createNormCitizens(woodFactory.getMaxCitizenCount()));
 
-        manager.getFactories().add(stoneFactory);
-        manager.getFactories().add(woodFactory);
+        factoryManager.getFactories().add(stoneFactory);
+        factoryManager.getFactories().add(woodFactory);
 
-        when(manager.getResourceManager()).thenReturn(new ResourceManager(ResourcePackUtil.createResourcePack(100, 25)));
-
-        ResourcePack resourceValue = manager.getResourcesValue(manager.getProducedResourcesPerTick());
-        assertEquals("Wood in high priority",500d, resourceValue.get(Resource.WOOD));
-        assertEquals("Wood in high priority",375d, resourceValue.get(Resource.STONE));
+        resourceManager.tick();
+        ResourcePack resourceValue = factoryManager.getResourcesValue(factoryManager.getResourceManager().getCommonResourcesCurrentTick());
+        assertEquals("Wood has high priority",550d, resourceValue.get(Resource.WOOD));
+        assertEquals("Wood has high priority",825d, resourceValue.get(Resource.STONE));
     }
 }

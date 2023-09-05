@@ -21,6 +21,7 @@ public class ResourceManager extends Manager implements PostTicker {
     }
 
     public ResourceManager(ResourcePack resourcePack) {
+        this();
         this.resourcePack = resourcePack;
     }
 
@@ -33,7 +34,7 @@ public class ResourceManager extends Manager implements PostTicker {
 
     protected void produceCommonResources() {
         commonResourcesCurrentTick = ResourcePack.createEmptyResourcePack();
-        factories.stream().filter(factory -> !factory.isProduceBurnedResource())
+        getFactories().stream().filter(factory -> !factory.isProduceBurnedResource())
                 .forEach(factory -> commonResourcesCurrentTick.concatResources(factory.getActualGeneratedResourcesPerTick()));
 
         resourcePack.concatResources(commonResourcesCurrentTick);
@@ -45,7 +46,7 @@ public class ResourceManager extends Manager implements PostTicker {
                     residueOfBurningResourcesFromPreviousTick.replace(k, resourcePack.get(k));
                     resourcePack.replace(k, 0d);
                 });
-        factories.stream().filter(Factory::isProduceBurnedResource)
+        getFactories().stream().filter(Factory::isProduceBurnedResource)
                 .forEach(factory -> resourcePack.concatResources(factory.getActualGeneratedResourcesPerTick()));
     }
 

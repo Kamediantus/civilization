@@ -1,9 +1,16 @@
 package ge.rodichev.civilization.entity.consts;
 
-public enum Age {
-    BABY(0), TEENAGER(10), MATURE(25), ELDERLY(75), DEATH(100);
+import lombok.*;
 
-    public int startAgeTick;
+@Getter
+public enum Age {
+    BABY(0),
+    TEENAGER(10),
+    MATURE(25),
+    ELDERLY(75),
+    DEATH(100);
+
+    private int startAgeTick;
 
     Age(int startAgeTick) {
         this.startAgeTick = startAgeTick;
@@ -23,5 +30,17 @@ public enum Age {
 
     public int getNextAgeStartTick() {
         return getNextAge().startAgeTick;
+    }
+
+    public static Age getAgeByTick(int ageTick) {
+        Age result = BABY;
+        for (Age age : Age.values()) {
+            if (ageTick >= age.startAgeTick) {
+                result = age;
+            } else {
+                return result;
+            }
+        }
+        return result;
     }
 }

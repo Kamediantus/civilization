@@ -3,6 +3,7 @@ package ge.rodichev.civilization.entity.building.factory;
 import ge.rodichev.civilization.resource.*;
 
 public class StonePit extends Factory {
+    private static final int MAX_CITIZENS = 15;
     @Override
     public ResourcePack getRequiredResourcesForBuild() {
         return RequiredResources.RESOURCE_MAP.get(StonePit.class);
@@ -15,7 +16,7 @@ public class StonePit extends Factory {
 
     @Override
     public int getMaxCitizenCount() {
-        return 15;
+        return MAX_CITIZENS;
     }
 
     @Override
