@@ -4,7 +4,7 @@ import ge.rodichev.civilization.entity.building.factory.*;
 import ge.rodichev.civilization.resource.*;
 
 public class FactoryUtil {
-    public static Factory createBaseFactory(int maxResGen, int maxCitCount, int reqCitCount) {
+    public static Factory createBaseFactory(int maxResGen, int maxCitCount, int reqCitCount, boolean produceBurningResource) {
         Factory factory = new Factory() {
             @Override
             public int getMaxCitizenCount() {
@@ -15,13 +15,20 @@ public class FactoryUtil {
             public int getRequiredCitizenCount() {
                 return reqCitCount;
             }
+
             @Override
             public ResourcePack getMaxGeneratedResourcesPerTick() {
-                return ResourcePack.createFilledResourcePack(maxResGen);
+                return ResourcePackUtil.createEmptyBurningOrNotResourcePack(produceBurningResource ,maxResGen);
             }
+
             @Override
             public ResourcePack getRequiredResourcesForBuild() {
                 return null;
+            }
+
+            @Override
+            public boolean isProduceBurnedResource() {
+                return produceBurningResource;
             }
         };
         return factory;

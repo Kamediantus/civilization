@@ -10,6 +10,12 @@ public class ResourcePack extends HashMap<Resource, Double> {
         return resourcePack;
     }
 
+    public static ResourcePack createEmptyBurnedResourcePack() {
+        ResourcePack resourcePack = new ResourcePack();
+        Arrays.stream(Resource.values()).filter(Resource::isBurnOnEndOfTick).forEach(resource -> resourcePack.put(resource, 0d));
+        return resourcePack;
+    }
+
     public ResourcePack add(Resource resource, Double count) {
         this.put(resource, count);
         return this;

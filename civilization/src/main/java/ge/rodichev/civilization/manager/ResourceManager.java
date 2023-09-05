@@ -17,7 +17,7 @@ public class ResourceManager extends Manager implements PostTicker {
 
     public ResourceManager() {
         resourcePack = ResourcePack.createEmptyResourcePack();
-        residueOfBurningResourcesFromPreviousTick = ResourcePack.createEmptyResourcePack();
+        residueOfBurningResourcesFromPreviousTick = ResourcePack.createEmptyBurnedResourcePack();
     }
 
     public ResourceManager(ResourcePack resourcePack) {
@@ -26,8 +26,7 @@ public class ResourceManager extends Manager implements PostTicker {
     }
 
     @Override
-    public void tick() { // TODO put all resource generation here instead of separate calling
-        // clear currentResources
+    public void tick() {
         produceCommonResources();
         produceBurningResources();
     }
@@ -48,6 +47,13 @@ public class ResourceManager extends Manager implements PostTicker {
                 });
         getFactories().stream().filter(Factory::isProduceBurnedResource)
                 .forEach(factory -> resourcePack.concatResources(factory.getActualGeneratedResourcesPerTick()));
+    }
+
+    protected void burnOutResources() {
+        resourcePack.keySet().stream().filter(Resource::isBurnOnEndOfTick).forEach(k -> {
+            residueOfBurningResourcesFromPreviousTick.replace(k, resourcePack.get(k));
+            resourcePack.replace(k, 0d);
+        });
     }
 
     public void increaseResources(ResourcePack resourcePackToIncrease) {

@@ -9,7 +9,7 @@ class FactoryTest {
 
     @Test
     void testGetActualGeneratedResourcesPerTick() {
-        Factory factory = FactoryUtil.createBaseFactory(100, 10, 2);
+        Factory factory = FactoryUtil.createBaseFactory(100, 10, 2, false);
         factory.setEmployee(CitizensUtils.createNormCitizens(2));
         factory.getActualGeneratedResourcesPerTick().forEach((resource, actualCount) -> {
             assertEquals("ResGen should be 20% of max", 20d, actualCount);
