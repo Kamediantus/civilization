@@ -36,19 +36,13 @@ public class CitizensUtils {
         return citizen;
     }
 
-    public static Citizens createCitizens(int countNorm, int countSlightlyIll, int countSeriousIll, int countAthletic) {
+    public static Citizens createCitizens(int countMature, int countElderly) {
         Citizens citizens = new Citizens();
-        IntStream.range(0, countNorm).forEach((c) -> {
+        IntStream.range(0, countMature).forEach((c) -> {
             citizens.add(new Citizen(c, Age.MATURE, Health.NORM));
         });
-        IntStream.range(0, countSlightlyIll).forEach((c) -> {
-            citizens.add(new Citizen(c, Age.MATURE, Health.SLIGHTLY_ILL));
-        });
-        IntStream.range(0, countSeriousIll).forEach((c) -> {
-            citizens.add(new Citizen(c, Age.MATURE, Health.SERIOUS_ILL));
-        });
-        IntStream.range(0, countAthletic).forEach((c) -> {
-            citizens.add(new Citizen(c, Age.MATURE, Health.ATHLETIC));
+        IntStream.range(0, countElderly).forEach((c) -> {
+            citizens.add(new Citizen(c, Age.ELDERLY, Health.NORM));
         });
         return citizens;
     }

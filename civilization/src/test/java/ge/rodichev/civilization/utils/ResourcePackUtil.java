@@ -5,6 +5,14 @@ import java.util.*;
 import ge.rodichev.civilization.resource.*;
 
 public class ResourcePackUtil {
+    public static ResourcePack createResourcePack(double wood, double stone, double workforce) {
+        ResourcePack resourcePack = ResourcePack.createEmptyResourcePack();
+        resourcePack.put(Resource.WOOD, wood);
+        resourcePack.put(Resource.STONE, stone);
+        resourcePack.put(Resource.WORKFORCE, workforce);
+        return resourcePack;
+    }
+
     public static ResourcePack createResourcePack(double wood, double stone) {
         ResourcePack resourcePack = ResourcePack.createEmptyResourcePack();
         resourcePack.put(Resource.WOOD, wood);

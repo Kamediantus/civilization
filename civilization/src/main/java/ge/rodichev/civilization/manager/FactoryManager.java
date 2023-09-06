@@ -2,6 +2,7 @@ package ge.rodichev.civilization.manager;
 
 import java.util.*;
 import java.util.concurrent.atomic.*;
+import java.util.stream.*;
 
 import ge.rodichev.civilization.entity.*;
 import ge.rodichev.civilization.entity.building.factory.*;
@@ -14,9 +15,10 @@ import org.springframework.beans.factory.annotation.*;
 @Setter
 public class FactoryManager extends Manager implements DeadProcessing {
     private Citizens freeToWorkCitizens;
-    private Iterator<Citizen> iterator;
+    private Iterator<Citizen> readyToWorkCitizensIterator;
     private final Map<Resource, Class<? extends Factory>> resourceFactoryMap;
     private final Map<Class<? extends Factory>, Resource> factoryResourceMap;
+    public static final Double BOTTOM_LINE_OF_BURNING_RESOURCES = 5d;
 
     @Autowired
     Factories factories;
@@ -33,24 +35,25 @@ public class FactoryManager extends Manager implements DeadProcessing {
     }
 
     @Override
-    public void tick() {
+    public void tick() { // TODO add tick test
         removeDeadCitizens();
 
         ResourcePack producedCommonResources = getResourceManager().getCommonResourcesCurrentTick();
-        iterator = getCitizensManager().getReadyToWorkCitizens().iterator();
+        setReadyToWorkCitizensIterator(getCitizensManager().getReadyToWorkCitizens().iterator());
         boolean addedToExistingFactory = true;
         boolean builtNewFactory = true;
         Resource mostValuableResource = getMostValuableResourceToImprove(getResourcesValue(producedCommonResources));
-        while (iterator.hasNext() && (addedToExistingFactory || builtNewFactory)) {
+        while (getReadyToWorkCitizensIterator().hasNext() && (addedToExistingFactory || builtNewFactory)) {
             addedToExistingFactory = addCitizensToFactories(mostValuableResource);
             builtNewFactory = tryToBuildMostValuableFactory(mostValuableResource);
         }
     }
 
+    // TODO remove DeadProcessing interface and rename method
     // remove not dead but elderly citizens
     @Override
     public void removeDeadCitizens() {
-        this.citizens.stream().filter(citizen -> citizen.getAge() == Age.ELDERLY && citizen.getFactory() != null)
+        getCitizens().stream().filter(citizen -> citizen.getAge() == Age.ELDERLY && citizen.getFactory() != null)
                 .forEach(citizen -> {
                     citizen.getFactory().getEmployee().remove(citizen);
                     citizen.setFactory(null);
@@ -60,14 +63,13 @@ public class FactoryManager extends Manager implements DeadProcessing {
     // true if added
     protected boolean addCitizensToFactories(Resource mostValuableResource) {
         AtomicBoolean added = new AtomicBoolean(false);
-        getFactories().stream().filter(factory -> factory.getClass() == getResourceFactoryMap().get(mostValuableResource)
+        Class<? extends Factory> mostValuableFactory = getResourceFactoryMap().get(mostValuableResource);
+        getFactories().stream().filter(factory -> factory.getClass() == mostValuableFactory
                         && factory.getEmployee().size() < factory.getMaxCitizenCount())
                 .forEach(factory -> {
-                    while (iterator.hasNext() && factory.getEmployee().size() < factory.getMaxCitizenCount()) {
+                    while (getReadyToWorkCitizensIterator().hasNext() && factory.getEmployee().size() < factory.getMaxCitizenCount()) {
                         added.set(true);
-                        Citizen newEmployee = iterator.next();
-                        factory.getEmployee().add(newEmployee);
-                        newEmployee.setFactory(factory);
+                        factory.addEmployee(getReadyToWorkCitizensIterator().next());
                     }
                 });
         return added.get();
@@ -78,24 +80,18 @@ public class FactoryManager extends Manager implements DeadProcessing {
         if (initEmployees.isEmpty()) {
             return false;
         } else if (mostValuableResource == Resource.WOOD) {
-            build(new Sawmill());
+            build(new Sawmill(), initEmployees);
         } else if (mostValuableResource == Resource.STONE) {
-            build(new StonePit());
+            build(new StonePit(), initEmployees);
         } else if (mostValuableResource == Resource.WORKFORCE) {
-            build(new ConstructionWorkshop());
+            build(new ConstructionWorkshop(), initEmployees);
         }
         return true;
     }
 
-    protected void build(Factory factoryToBuild) {
+    protected void build(Factory factoryToBuild, Citizens initEmployees) {
         getResourceManager().degreaseResources(factoryToBuild.getRequiredResourcesForBuild());
-        List<Citizen> employees = new ArrayList<>();
-        while (iterator.hasNext() && employees.size() < factoryToBuild.getMaxCitizenCount() / 2) {
-            employees.add(iterator.next());
-        }
-
-        factoryToBuild.getEmployee().addAll(employees);
-        employees.forEach(citizen -> citizen.setFactory(factoryToBuild));
+        factoryToBuild.addEmployees(initEmployees);
         getFactories().add(factoryToBuild);
     }
 
@@ -105,24 +101,24 @@ public class FactoryManager extends Manager implements DeadProcessing {
         if (!getResourceManager().getResourcePack().hasEnoughResources(RequiredResources.RESOURCE_MAP.get(buildClass))) {
             return initEmployees;
         } else {
-            while (iterator.hasNext() && initEmployees.size() < RequiredResources.CITIZENS_MAP.get(buildClass)) {
-                initEmployees.add(iterator.next());
+            while (getReadyToWorkCitizensIterator().hasNext() && initEmployees.size() < RequiredResources.CITIZENS_MAP.get(buildClass)) {
+                initEmployees.add(getReadyToWorkCitizensIterator().next());
             }
         }
         return initEmployees.size() < RequiredResources.CITIZENS_MAP.get(buildClass) ? new Citizens() : initEmployees;
     }
 
     protected Resource getMostValuableResourceToImprove(ResourcePack valuePerResource) {
-        // if workforce turn to 0 in previous tick, it needs to build more workshops
-        if (valuePerResource.get(Resource.WORKFORCE) < 5d) {
+        if (valuePerResource.get(Resource.WORKFORCE) < BOTTOM_LINE_OF_BURNING_RESOURCES) {
             return Resource.WORKFORCE;
         }
         Resource mostValuableResource = Resource.WOOD;
         Double minValue = valuePerResource.get(mostValuableResource);
-        for (Map.Entry<Resource, Double> entry: valuePerResource.entrySet()) {
+        for (Map.Entry<Resource, Double> entry: valuePerResource.entrySet().stream()
+                .filter(entry -> !entry.getKey().isBurnOnEndOfTick()).collect(Collectors.toSet())) {
             if (entry.getValue() < minValue) {
-               minValue = entry.getValue();
-               mostValuableResource = entry.getKey();
+                minValue = entry.getValue();
+                mostValuableResource = entry.getKey();
             }
         }
         return mostValuableResource;

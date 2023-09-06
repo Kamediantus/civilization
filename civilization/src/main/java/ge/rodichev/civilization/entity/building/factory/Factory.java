@@ -36,4 +36,13 @@ public abstract class Factory extends Building {
                 : Double.valueOf(getEmployee().size()) / getMaxCitizenCount();
     }
 
+    public void addEmployee(Citizen citizen) {
+        this.getEmployee().add(citizen);
+        citizen.setFactory(this);
+    }
+
+    public void addEmployees(Citizens citizens) {
+        this.getEmployee().addAll(citizens);
+        citizens.forEach(citizen -> citizen.setFactory(this));
+    }
 }
