@@ -26,8 +26,11 @@ public class CivilizationApplication {
     private static Citizens citizens;
 
 	public static void main(String[] args) {
-		SpringApplication.run(CivilizationApplication.class, args);
+        SpringApplication.run(CivilizationApplication.class, args);
+        runCivilization();
+	}
 
+    public static void runCivilization() {
         multiplyManager = context.getBean(MultiplyManager.class);
         housingManager = context.getBean(HousingManager.class);
         factoryManager = context.getBean(FactoryManager.class);
@@ -45,7 +48,7 @@ public class CivilizationApplication {
         IntStream.range(10000, 100000).forEach(i -> generalTick());
 
         Logger.getLogger("test").log(Level.ALL, "end/`");
-	}
+    }
 
     private static void generalTick() {
         citizensManager.tick();

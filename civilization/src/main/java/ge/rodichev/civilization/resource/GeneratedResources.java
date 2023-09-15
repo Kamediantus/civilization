@@ -20,14 +20,14 @@ public class GeneratedResources {
     }
 
     private static ResourcePack getSawmillGeneratedResources() {
-        return new ResourcePack().add(Resource.WOOD, 5d);
+        return new ResourcePack().add(Resource.WOOD, 2d);
     }
 
     private static ResourcePack getStonePitGeneratedResources() {
-        return new ResourcePack().add(Resource.STONE, 5d);
+        return new ResourcePack().add(Resource.STONE, 2d);
     }
 
     private static ResourcePack getConstructionWorkshopGeneratedResources() {
-        return new ResourcePack().add(Resource.WORKFORCE, 10d);
+        return new ResourcePack().add(Resource.WORKFORCE, 4d);
     }
 }
