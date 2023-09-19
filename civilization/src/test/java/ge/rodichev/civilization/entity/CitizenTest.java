@@ -11,7 +11,7 @@ class CitizenTest {
 
     @Test
     void testTick() {
-        Citizen citizen = new Citizen(1l, Age.BABY, Health.NORM);
+        Citizen citizen = new Citizen(Age.BABY, Health.NORM);
 
         assertEquals("Citizen has no cooldown at init", Citizen.TICK_READY_TO_MULTIPLY, citizen.getTickWithoutMultiply());
         assertEquals("Start age tick", Age.BABY.getStartAgeTick(), citizen.getAgeTick());
@@ -27,7 +27,7 @@ class CitizenTest {
 
     @Test
     void testAbleToMultiply() { // TODO add test by health when it will be implemented
-        Citizen citizen = new Citizen(1l, Age.BABY, Health.NORM);
+        Citizen citizen = new Citizen(Age.BABY, Health.NORM);
         assertFalse("Not able", citizen.ableToMultiply());
         assertFalse("Too young to multiply", citizen.ableToMultiplyByAge());
         assertTrue("Cooldoun is ok", citizen.ableToMultiplyByCooldown());

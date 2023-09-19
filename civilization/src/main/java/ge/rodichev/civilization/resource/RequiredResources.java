@@ -36,29 +36,29 @@ public class RequiredResources {
 
     public static ResourcePack getSawmillRequiredResources() {
         return new ResourcePack()
-                .add(Resource.WOOD, 10d)
-                .add(Resource.STONE, 5d)
+                .add(Resource.WOOD, 20d)
+                .add(Resource.STONE, 10d)
                 .add(Resource.WORKFORCE, 2d);
     }
 
     public static ResourcePack getSimpleHutRequiredResources() {
         return new ResourcePack()
-                .add(Resource.WOOD, 8d)
-                .add(Resource.STONE, 5d)
+                .add(Resource.WOOD, 20d)
+                .add(Resource.STONE, 10d)
                 .add(Resource.WORKFORCE, 2d);
     }
 
     public static ResourcePack getStonePitRequiredResources() {
         return new ResourcePack()
-                .add(Resource.WOOD, 10d)
-                .add(Resource.STONE, 15d)
+                .add(Resource.WOOD, 50d)
+                .add(Resource.STONE, 30d)
                 .add(Resource.WORKFORCE, 4d);
     }
 
     public static ResourcePack getConstructionWorkshopRequiredResources() {
         return new ResourcePack()
-                .add(Resource.WOOD, 25d)
-                .add(Resource.STONE, 20d)
+                .add(Resource.WOOD, 50d)
+                .add(Resource.STONE, 25d)
                 .add(Resource.WORKFORCE, 1d);
     }
 }

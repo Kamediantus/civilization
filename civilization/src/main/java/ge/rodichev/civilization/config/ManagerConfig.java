@@ -52,4 +52,10 @@ public class ManagerConfig {
     public CitizensManager citizensManager() {
         return new CitizensManager();
     }
+
+    @Bean
+    @Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
+    public CivilizationManager civilizationManager() {
+        return new CivilizationManager();
+    }
 }

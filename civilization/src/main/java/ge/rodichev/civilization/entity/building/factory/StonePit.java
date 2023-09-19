@@ -15,6 +15,11 @@ public class StonePit extends Factory {
     }
 
     @Override
+    public Resource getProducedResourceType() {
+        return Resource.STONE;
+    }
+
+    @Override
     public int getMaxCitizenCount() {
         return MAX_CITIZENS;
     }

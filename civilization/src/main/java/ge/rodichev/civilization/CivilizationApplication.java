@@ -8,6 +8,7 @@ import ge.rodichev.civilization.config.*;
 import ge.rodichev.civilization.entity.*;
 import ge.rodichev.civilization.entity.building.factory.*;
 import ge.rodichev.civilization.entity.consts.*;
+import ge.rodichev.civilization.kafka.*;
 import ge.rodichev.civilization.manager.*;
 import ge.rodichev.civilization.resource.*;
 import org.springframework.boot.*;
@@ -16,12 +17,9 @@ import org.springframework.context.annotation.*;
 
 @SpringBootApplication
 public class CivilizationApplication {
-    private static AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(ManagerConfig.class);
-    private static MultiplyManager multiplyManager;
-    private static HousingManager housingManager;
-    private static FactoryManager factoryManager;
-    private static CitizensManager citizensManager;
-    private static ResourceManager resourceManager;
+    private static AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(ManagerConfig.class, KafkaProducerConfig.class);
+
+    private static CivilizationManager civilizationManager;
     private static Factories factories;
     private static Citizens citizens;
 
@@ -31,36 +29,19 @@ public class CivilizationApplication {
 	}
 
     public static void runCivilization() {
-        multiplyManager = context.getBean(MultiplyManager.class);
-        housingManager = context.getBean(HousingManager.class);
-        factoryManager = context.getBean(FactoryManager.class);
-        citizensManager = context.getBean(CitizensManager.class);
-        resourceManager = context.getBean(ResourceManager.class);
+        civilizationManager = context.getBean(CivilizationManager.class);
         factories = context.getBean(Factories.class);
         citizens = context.getBean(Citizens.class);
 
         init();
 
-        IntStream.range(0, 1000).forEach(i -> generalTick());
-        IntStream.range(1000, 2000).forEach(i -> generalTick());
-        IntStream.range(2000, 3000).forEach(i -> generalTick());
-        IntStream.range(3000, 10000).forEach(i -> generalTick());
-        IntStream.range(10000, 100000).forEach(i -> generalTick());
+        IntStream.range(0, 1000).forEach(i -> civilizationManager.tick());
+        IntStream.range(1000, 2000).forEach(i -> civilizationManager.tick());
+        IntStream.range(2000, 3000).forEach(i -> civilizationManager.tick());
+        IntStream.range(3000, 10000).forEach(i -> civilizationManager.tick());
+        IntStream.range(10000, 100000).forEach(i -> civilizationManager.tick());
 
         Logger.getLogger("test").log(Level.ALL, "end/`");
-    }
-
-    private static void generalTick() {
-        citizensManager.tick();
-        multiplyManager.tick();
-        resourceManager.tick();
-        housingManager.tick();
-        factoryManager.tick();
-    }
-
-    public static void initCitizens(Citizens citizensToAdd) {
-        Citizens citizens = context.getBean(Citizens.class);
-        citizens.addAll(citizensToAdd);
     }
 
     public static void initResourceManager(ResourcePack startResources) {
@@ -70,7 +51,7 @@ public class CivilizationApplication {
 
     public static Citizens createNormCitizens(int count) {
         Citizens citizens = new Citizens();
-        IntStream.range(0, count).forEach(c -> citizens.add(new Citizen(c, Age.MATURE, Health.NORM)));
+        IntStream.range(0, count).forEach(c -> citizens.add(new Citizen(Age.MATURE, Health.NORM)));
         return citizens;
     }
 
@@ -84,7 +65,7 @@ public class CivilizationApplication {
         });
         citizens.addAll(citizensToAdd);
         factories.add(workshop);
-        initResourceManager(ResourcePack.createFilledResourcePack(200));
-        housingManager.buildSimpleHut();
+        initResourceManager(ResourcePack.createFilledCommonResourcePack(500));
+        civilizationManager.getHousingManager().buildSimpleHut();
     }
 }

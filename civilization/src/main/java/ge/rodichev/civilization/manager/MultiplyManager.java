@@ -41,7 +41,7 @@ public class MultiplyManager extends Manager {
         if (!citizens.isEmpty()) {
             List<Pair<Citizen, Citizen>> pairs = groupCitizensByPairs(citizens);
             pairs.forEach(pair -> {
-                this.citizens.add(new Citizen(citizens.size(), Age.BABY, Health.NORM));
+                this.citizens.add(new Citizen(Age.BABY, Health.NORM));
                 pair.getFirst().setTickWithoutMultiply(0);
                 pair.getSecond().setTickWithoutMultiply(0);
             });

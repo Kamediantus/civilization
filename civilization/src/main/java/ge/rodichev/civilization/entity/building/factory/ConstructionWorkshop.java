@@ -16,6 +16,11 @@ public class ConstructionWorkshop extends Factory {
     }
 
     @Override
+    public Resource getProducedResourceType() {
+        return Resource.WORKFORCE;
+    }
+
+    @Override
     public int getMaxCitizenCount() {
         return MAX_CITIZENS;
     }

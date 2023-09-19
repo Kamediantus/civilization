@@ -20,6 +20,11 @@ public class Sawmill extends Factory {
     }
 
     @Override
+    public Resource getProducedResourceType() {
+        return Resource.WOOD;
+    }
+
+    @Override
     public int getMaxCitizenCount() {
         return MAX_CITIZENS;
     }

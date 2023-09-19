@@ -27,6 +27,12 @@ public class ResourcePack extends HashMap<Resource, Double> {
         return resourcePack;
     }
 
+    public static ResourcePack createFilledCommonResourcePack(double initResourceCount) {
+        ResourcePack resourcePack = new ResourcePack();
+        Arrays.stream(Resource.values()).filter(res -> !res.isBurnOnEndOfTick()).forEach(resource -> resourcePack.put(resource, initResourceCount));
+        return resourcePack;
+    }
+
     public void concatResources(ResourcePack resourcePack) {
         resourcePack.keySet().forEach(k -> this.replace(k, this.get(k) + resourcePack.get(k)));
     }
@@ -61,5 +67,4 @@ public class ResourcePack extends HashMap<Resource, Double> {
     public boolean hasEnoughResource(Resource resource, Double necessaryCount) {
         return this.get(resource) >= necessaryCount;
     }
-
 }

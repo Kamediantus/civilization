@@ -1,5 +1,7 @@
 package ge.rodichev.civilization.entity;
 
+import java.util.concurrent.atomic.*;
+
 import ge.rodichev.civilization.entity.building.factory.*;
 import ge.rodichev.civilization.entity.consts.*;
 import lombok.*;
@@ -7,7 +9,6 @@ import lombok.*;
 @Getter
 @Setter
 public class Citizen {
-    private long id;
     private Age age;
     private Education education;
     private Factory factory;
@@ -18,10 +19,12 @@ public class Citizen {
     private int tickWithoutMultiply;
     private int ageTick;
 
+    static final AtomicLong NEXT_ID = new AtomicLong(0);
+    final long id = NEXT_ID.getAndIncrement();
+
     public Citizen() {}
 
-    public Citizen(long id, Age age, Health health) {
-        this.id = id;
+    public Citizen(Age age, Health health) {
         this.age = age;
         this.health = health;
         this.tickWithoutMultiply = TICK_READY_TO_MULTIPLY;
